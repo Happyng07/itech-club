@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iTech Club Database</title>
+    <style>
+        body {
+            background-color: black;
+            color: #00FF00; /* 黑客绿 */
+            font-family: 'Courier New', Courier, monospace;
+            padding: 20px;
+            font-size: 16px;
+        }
+        #console {
+            white-space: pre-line;
+        }
+        .cursor {
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+    </style>
+</head>
+<body>
+    <div id="console"></div><span class="cursor">_</span>
+
+    <script>
+        // 你只要在这里改你们 22 个人的名字就可以了！
+      const textToType = `> System Booting...
+> Loading iTech Club Member Database...
+> Authenticating... Success.
+>
+> LVL UP Achieved! Sathiaraj
+> LVL UP Achieved! Shi Le
+> LVL UP Achieved! Zheng Lun
+> LVL UP Achieved! Zulhilmi
+> LVL UP Achieved! Karan
+> LVL UP Achieved! Simon
+> LVL UP Achieved! Rishi
+> LVL UP Achieved! Dhea
+> LVL UP Achieved! Teeyna
+> LVL UP Achieved! Keshika
+> LVL UP Achieved! Sanjees
+> LVL UP Achieved! Tarkeshwaran
+> LVL UP Achieved! Izuwan
+> LVL UP Achieved! Aravind
+> LVL UP Achieved! Pavithren
+> LVL UP Achieved! Praveen
+> LVL UP Achieved! Dhacaiyani
+> LVL UP Achieved! Nurhan
+> LVL UP Achieved! Krishna
+> LVL UP Achieved! Yuvanesh
+> LVL UP Achieved! Yugendiran
+> LVL UP Achieved! Miss IDA`;
+
+        let i = 0;
+        const speed = 50; // 打字速度
+
+        function typeWriter() {
+            if (i < textToType.length) {
+                document.getElementById("console").innerHTML += textToType.charAt(i);
+                i++;
+                setTimeout(typeWriter, speed);
+            }
+        }
+
+        window.onload = typeWriter;
+    </script>
+</body>
+</html>
