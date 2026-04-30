@@ -1,44 +1,30 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>iTech Club Database</title>
     <style>
         body {
-            background-color: #000;
-            color: #00FF00;
+            background-color: black;
+            color: #00FF00; /* 默认的黑客绿 */
             font-family: 'Courier New', Courier, monospace;
-            padding: 25px;
-            font-size: 15px;
-            line-height: 1.5;
-            margin: 0;
+            padding: 20px;
+            font-size: 16px;
         }
         #console {
-            white-space: pre-wrap;
-            word-wrap: break-word;
+            white-space: pre-line;
         }
         .cursor {
-            display: inline-block;
-            width: 10px;
-            height: 15px;
-            background-color: #00FF00;
             animation: blink 1s step-end infinite;
-            margin-left: 5px;
-            vertical-align: middle;
         }
         @keyframes blink { 50% { opacity: 0; } }
-        
-        .mentor { color: #FFFF00; font-weight: bold; } /* 仅 Miss IDA 保持黄色 */
     </style>
 </head>
 <body>
-    <div id="console"></div><span class="cursor"></span>
+    <div id="console"></div><span class="cursor">_</span>
 
     <script>
-        const consoleEl = document.getElementById("console");
-        
-       
         const textToType = `> System Booting...
 > Loading iTech Club Member Database...
 > Authenticating... Success.
@@ -65,34 +51,25 @@
 > LVL UP Achieved! Krishna
 > LVL UP Achieved! Yuvanesh
 > LVL UP Achieved! Yugendiran`;
-            "> ",
-            "> [STATUS]: All members synchronized.",
-            "> [MISSION]: Continue to power the future."
-        ];
 
-        let lineIdx = 0;
-        let charIdx = 0;
+        let i = 0;
+        const speed = 50; 
 
         function typeWriter() {
-            if (lineIdx < lines.length) {
-                let currentLine = lines[lineIdx];
-
-                if (charIdx < currentLine.length) {
-                    let char = currentLine.charAt(charIdx);
-                    
-                    if (currentLine.includes("Miss IDA")) {
-                        consoleEl.innerHTML += `<span class="mentor">${char}</span>`;
-                    } else {
-                        consoleEl.innerHTML += char;
+            if (i < textToType.length) {
+                if (textToType.charAt(i) === '<') {
+                    let tag = "";
+                    while (textToType.charAt(i) !== '>' && i < textToType.length) {
+                        tag += textToType.charAt(i);
+                        i++;
                     }
-                    
-                    charIdx++;
-                    setTimeout(typeWriter, 40);
+                    tag += '>';
+                    document.getElementById("console").innerHTML += tag;
+                    typeWriter(); 
                 } else {
-                    consoleEl.innerHTML += "<br>";
-                    lineIdx++;
-                    charIdx = 0;
-                    setTimeout(typeWriter, 200); 
+                    document.getElementById("console").innerHTML += textToType.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, speed);
                 }
             }
         }
