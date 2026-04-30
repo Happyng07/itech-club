@@ -54,9 +54,11 @@
 
         let i = 0;
         const speed = 50; 
+        let htmlContent = ""; // 修复：用变量存起完整内容，防止浏览器乱改标签
 
         function typeWriter() {
             if (i < textToType.length) {
+                // 如果遇到 HTML 颜色标签
                 if (textToType.charAt(i) === '<') {
                     let tag = "";
                     while (textToType.charAt(i) !== '>' && i < textToType.length) {
@@ -64,10 +66,12 @@
                         i++;
                     }
                     tag += '>';
-                    document.getElementById("console").innerHTML += tag;
+                    i++; // 【关键修复！】跳过标签的 '>'，防止打出多余的符号
+                    htmlContent += tag;
                     typeWriter(); 
                 } else {
-                    document.getElementById("console").innerHTML += textToType.charAt(i);
+                    htmlContent += textToType.charAt(i);
+                    document.getElementById("console").innerHTML = htmlContent;
                     i++;
                     setTimeout(typeWriter, speed);
                 }
