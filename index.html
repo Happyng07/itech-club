@@ -7,15 +7,15 @@
     <style>
         body {
             background-color: black;
-            color: #00FF00; /* 默认的黑客绿 */
             font-family: 'Courier New', Courier, monospace;
             padding: 20px;
             font-size: 16px;
         }
         #console {
-            white-space: pre-line;
+            line-height: 1.5; /* 让行距看起来更像真实 Terminal */
         }
         .cursor {
+            color: #00FF00;
             animation: blink 1s step-end infinite;
         }
         @keyframes blink { 50% { opacity: 0; } }
@@ -25,54 +25,63 @@
     <div id="console"></div><span class="cursor">_</span>
 
     <script>
-        const textToType = `> System Booting...
-> Loading iTech Club Member Database...
-> Authenticating... Success.
->
-<span style="color: #FFD700;">> LVL UP Achieved! Miss IDA</span>
-> LVL UP Achieved! Sathiaraj
-> LVL UP Achieved! Shi Le
-> LVL UP Achieved! Zheng Lun
-> LVL UP Achieved! Zulhilmi
-> LVL UP Achieved! Karan
-> LVL UP Achieved! Simon
-> LVL UP Achieved! Rishi
-> LVL UP Achieved! Dhea
-> LVL UP Achieved! Teeyna
-> LVL UP Achieved! Keshika
-> LVL UP Achieved! Sanjees
-> LVL UP Achieved! Tarkeshwaran
-> LVL UP Achieved! Izuwan
-> LVL UP Achieved! Aravind
-> LVL UP Achieved! Pavithren
-> LVL UP Achieved! Praveen
-> LVL UP Achieved! Dhacaiyani
-> LVL UP Achieved! Nurhan
-> LVL UP Achieved! Krishna
-> LVL UP Achieved! Yuvanesh
-> LVL UP Achieved! Yugendiran`;
+        // 【终极写法】：用 Array 和 Object 来精准控制每一行的颜色！
+        // 以后加人，只需要照着格式在下面加一行就可以了。
+        const lines = [
+            { text: "> System Booting...", color: "#00FF00" },
+            { text: "> Loading iTech Club Member Database...", color: "#00FF00" },
+            { text: "> Authenticating... Success.", color: "#00FF00" },
+            { text: " ", color: "#00FF00" }, // 这是一个空行
+            { text: "> LVL UP Achieved! Miss IDA", color: "#FFD700" }, // ⭐️ VIP 专属金色！
+            { text: "> LVL UP Achieved! Sathiaraj", color: "#00FF00" },
+            { text: "> LVL UP Achieved! Shi Le", color: "#00FF00" },
+            { text: "> LVL UP Achieved! Zheng Lun", color: "#00FF00" },
+            { text: "> LVL UP Achieved! Zulhilmi", color: "#00FF00" },
+            { text: "> LVL UP Achieved! Karan", color: "#00FF00" },
+            { text: "> LVL UP Achieved! Simon", color: "#00FF00" },
+            { text: "> LVL UP Achieved! Rishi", color: "#00FF00" },
+            { text: "> LVL UP Achieved! Dhea", color: "#00FF00" },
+            { text: "> LVL UP Achieved! Teeyna", color: "#00FF00" },
+            { text: "> LVL UP Achieved! Keshika", color: "#00FF00" },
+            { text: "> LVL UP Achieved! Sanjees", color: "#00FF00" },
+            { text: "> LVL UP Achieved! Tarkeshwaran", color: "#00FF00" },
+            { text: "> LVL UP Achieved! Izuwan", color: "#00FF00" },
+            { text: "> LVL UP Achieved! Aravind", color: "#00FF00" },
+            { text: "> LVL UP Achieved! Pavithren", color: "#00FF00" },
+            { text: "> LVL UP Achieved! Praveen", color: "#00FF00" },
+            { text: "> LVL UP Achieved! Dhacaiyani", color: "#00FF00" },
+            { text: "> LVL UP Achieved! Nurhan", color: "#00FF00" },
+            { text: "> LVL UP Achieved! Krishna", color: "#00FF00" },
+            { text: "> LVL UP Achieved! Yuvanesh", color: "#00FF00" },
+            { text: "> LVL UP Achieved! Yugendiran", color: "#00FF00" }
+        ];
 
-        let i = 0;
-        const speed = 50; 
-        let htmlContent = ""; // 修复：用变量存起完整内容，防止浏览器乱改标签
+        const consoleDiv = document.getElementById("console");
+        let lineIndex = 0;
+        let charIndex = 0;
+        const speed = 50;
 
         function typeWriter() {
-            if (i < textToType.length) {
-                // 如果遇到 HTML 颜色标签
-                if (textToType.charAt(i) === '<') {
-                    let tag = "";
-                    while (textToType.charAt(i) !== '>' && i < textToType.length) {
-                        tag += textToType.charAt(i);
-                        i++;
-                    }
-                    tag += '>';
-                    i++; // 【关键修复！】跳过标签的 '>'，防止打出多余的符号
-                    htmlContent += tag;
-                    typeWriter(); 
+            if (lineIndex < lines.length) {
+                let currentLine = lines[lineIndex];
+                
+                // 核心逻辑：每到新的一行，先建好带颜色的安全框 (Span)
+                if (charIndex === 0) {
+                    const span = document.createElement("span");
+                    span.style.color = currentLine.color;
+                    span.id = "line-" + lineIndex;
+                    consoleDiv.appendChild(span);
+                    consoleDiv.appendChild(document.createElement("br")); // 敲回车换行
+                }
+
+                // 用 textContent 纯文本输入，绝对不会被浏览器篡改标签
+                if (charIndex < currentLine.text.length) {
+                    document.getElementById("line-" + lineIndex).textContent += currentLine.text.charAt(charIndex);
+                    charIndex++;
+                    setTimeout(typeWriter, speed);
                 } else {
-                    htmlContent += textToType.charAt(i);
-                    document.getElementById("console").innerHTML = htmlContent;
-                    i++;
+                    charIndex = 0;
+                    lineIndex++;
                     setTimeout(typeWriter, speed);
                 }
             }
